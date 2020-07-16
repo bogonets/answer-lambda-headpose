@@ -1,0 +1,152 @@
+{
+    "info": {
+        "name": "head_pose_detect",
+        "version": "1.0.0",
+        "category": "pose_estimation",
+        "keywords": [
+            "deep",
+            "pose",
+            "head"
+        ],
+        "homepage": "https://answer.bogonets.com/",
+        "bugs": "https://answer.bogonets.com/",
+        "license": "Bogonet License",
+        "author": "wooruang",
+        "dependencies": [
+            {
+                "type": "pip",
+                "src": "numpy"
+            },
+            {
+                "type": "pip",
+                "src": "tensorflow"
+            },
+            {
+                "type": "pip",
+                "src": "keras"
+            },
+            {
+                "type": "pip",
+                "src": "opencv-python"
+            }
+        ],
+        "engines": ">=1.0.2",
+        "environment": {
+            "type": "pyenv",
+            "name": "detectron2"
+        },
+        "titles": {
+            "en": "Detectron2 Detection",
+            "ko": "Detectron2 탐지"
+        },
+        "descriptions": {
+            "en": "Detection by Detectron2.",
+            "ko": "."
+        },
+        "documentation_mime": "text",
+        "documentations": {},
+        "meta": {}
+    },
+    "controls": {
+        "input": "image",
+        "output": ["draw_image", "heads"]
+    },
+    "props": [
+        {
+            "rule": "read_and_write",
+            "name": "weight_file1",
+            "default_value": "",
+            "type": "str",
+            "required": true,
+            "valid": {},
+            "title": {
+                "en": "A File path of Weights 1",
+                "ko": "Weights 파일 1 경로"
+            },
+            "help": {
+                "en": "",
+                "ko": ""
+            }
+        },
+        {
+            "rule": "read_and_write",
+            "name": "weight_file2",
+            "default_value": "",
+            "type": "str",
+            "required": true,
+            "valid": {},
+            "title": {
+                "en": "A File path of Weights 2",
+                "ko": "Weights 파일 2 경로"
+            },
+            "help": {
+                "en": "",
+                "ko": ""
+            }
+        },
+        {
+            "rule": "read_and_write",
+            "name": "weight_file3",
+            "default_value": "",
+            "type": "str",
+            "required": true,
+            "valid": {},
+            "title": {
+                "en": "A File path of Weights 3",
+                "ko": "Weights 파일 3 경로"
+            },
+            "help": {
+                "en": "",
+                "ko": ""
+            }
+        },
+        {
+            "rule": "read_and_write",
+            "name": "face_proto_file",
+            "default_value": "",
+            "type": "str",
+            "required": true,
+            "valid": {},
+            "title": {
+                "en": "A File path of Proto of Face",
+                "ko": "Face Proto 파일 경로"
+            },
+            "help": {
+                "en": "",
+                "ko": ""
+            }
+        },
+        {
+            "rule": "read_and_write",
+            "name": "face_model_file",
+            "default_value": "",
+            "type": "str",
+            "required": true,
+            "valid": {},
+            "title": {
+                "en": "A File path of Weights of Face",
+                "ko": "Face Weights 파일 경로"
+            },
+            "help": {
+                "en": "",
+                "ko": ""
+            }
+        },
+        {
+            "rule": "read_and_write",
+            "name": "image_out",
+            "default_value": "True",
+            "type": "bool",
+            "required": true,
+            "valid": {},
+            "title": {
+                "en": "Enable Image out",
+                "ko": "이미지 전달 여부"
+            },
+            "help": {
+                "en": "",
+                "ko": ""
+            }
+        }
+    ]
+}
