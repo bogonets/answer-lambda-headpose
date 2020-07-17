@@ -1,17 +1,21 @@
-import numpy as np
-
 import sys
 import os
-
+import numpy as np
+import cv2
+import tensorflow as tf
+from keras.models import Model
+from keras.layers import Average, Input
 import fsanet
+
+# from headlib.FSANET_model import *
 
 
 # Props.
-weight_file1 = 'fsanet_capsule_3_16_2_21_5.h5'
-weight_file2 = 'fsanet_var_capsule_3_16_2_21_5.h5'
-weight_file3 = 'fsanet_noS_capsule_3_16_2_192_5.h5'
-face_proto_file = 'deploy.prototxt'
-face_model_file = 'res10_300x300_ssd_iter_140000.caffemodel'
+weight_file1 = 'head_pose_fsanet/fsanet_capsule_3_16_2_21_5.h5'
+weight_file2 = 'head_pose_fsanet/fsanet_var_capsule_3_16_2_21_5.h5'
+weight_file3 = 'head_pose_fsanet/fsanet_noS_capsule_3_16_2_192_5.h5'
+face_proto_file = 'head_pose_fsanet/deploy.prototxt'
+face_model_file = 'head_pose_fsanet/res10_300x300_ssd_iter_140000.caffemodel'
 image_out = True
 
 # Model variables.
@@ -23,27 +27,7 @@ net = None
 
 # load model and weights
 img_size = 64
-stage_num = [3, 3, 3]
-lambda_local = 1
-lambda_d = 1
-img_idx = 0
-detected = ''  # make this not local variable
-time_detection = 0
-time_network = 0
-time_plot = 0
-skip_frame = 1  # every 5 frame do 1 detection and network forward propagation
 ad = 0.6
-
-# Parameters
-num_capsule = 3
-dim_capsule = 16
-routings = 2
-stage_num = [3, 3, 3]
-lambda_d = 1
-num_classes = 3
-image_size = 64
-num_primcaps = 7*3
-m_dim = 5
 
 
 def on_set(k, v):
@@ -54,8 +38,8 @@ def on_set(k, v):
         global weight_file2
         weight_file2 = v
     elif k == 'weight_file3':
-        global weight_file2
-        weight_file2 = v
+        global weight_file3
+        weight_file3 = v
     elif k == 'face_proto_file':
         global face_proto_file
         face_proto_file = v
@@ -89,17 +73,44 @@ def on_init():
     global model
     global net
 
+    # Gpu setting.
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+        try:
+            tf.config.experimental.set_virtual_device_configuration(
+                gpus[0],
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+            logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+            sys.stdout.write(f"{len(gpus)} Physical GPUs, {len(logical_gpus)} Logical GPUs\n")
+            sys.stdout.flush()
+        except RuntimeError as e:
+            # Virtual devices must be set before GPUs have been initialized
+            sys.stdout.write(e)
+            sys.stdout.flush()
+
+    # Parameters
+    num_capsule = 3
+    dim_capsule = 16
+    routings = 2
+    stage_num = [3, 3, 3]
+    lambda_d = 1
+    num_classes = 3
+    image_size = 64
+    num_primcaps = 7*3
+    m_dim = 5
+
     S_set = [num_capsule, dim_capsule, routings, num_primcaps, m_dim]
 
-    model1 = FSA_net_Capsule(image_size, num_classes,
+    model1 = fsanet.FSA_net_Capsule(image_size, num_classes,
                              stage_num, lambda_d, S_set)()
-    model2 = FSA_net_Var_Capsule(
+    model2 = fsanet.FSA_net_Var_Capsule(
         image_size, num_classes, stage_num, lambda_d, S_set)()
 
     num_primcaps = 8*8*3
     S_set = [num_capsule, dim_capsule, routings, num_primcaps, m_dim]
 
-    model3 = FSA_net_noS_Capsule(
+    model3 = fsanet.FSA_net_noS_Capsule(
         image_size, num_classes, stage_num, lambda_d, S_set)()
 
     sys.stdout.write('Loading models ...')
@@ -137,7 +148,10 @@ def on_run(image):
     img_h, img_w, _ = np.shape(image)
 
     heads, draw_image = fsanet.predict_head_pose(
-        image, ad, img_size, img_w, img_h, model, image_out=image_out)
+        image, ad, img_size, img_w, img_h, model, net, image_out=image_out)
 
-    return {'draw_image': draw_image,
-            'heads': np.array(heads)}
+    return {
+        'draw_image': draw_image,
+        'heads': np.array(heads)
+    }
+

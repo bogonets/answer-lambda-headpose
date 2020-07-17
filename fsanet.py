@@ -5,7 +5,6 @@ import numpy as np
 import os
 import cv2
 import sys
-sys.path.append('..')
 # from moviepy.editor import *
 # from moviepy.editor import *
 # from mtcnn.mtcnn import MTCNN
@@ -96,7 +95,7 @@ def draw_results_ssd(detected, input_img, faces, ad, img_size, img_w, img_h, mod
     return input_img  # ,time_network,time_plot
 
 
-def predict_head_pose(image, ad, img_size, img_w, img_h, model, time_detection=0, time_network=0, time_plot=0, image_out=True):
+def predict_head_pose(image, ad, img_size, img_w, img_h, model, net, time_detection=0, time_network=0, time_plot=0, image_out=True):
 
     draw_img = image.copy()
 
@@ -161,9 +160,9 @@ def predict_head_pose(image, ad, img_size, img_w, img_h, model, time_detection=0
                 heads.append([p_result[0][0], p_result[0][1], p_result[0][2]])
 
     if image_out:
-        return head, draw_img
+        return heads, draw_img
     else:
-        return head, None
+        return heads, None
 
 
 def main():

@@ -55,7 +55,7 @@
         {
             "rule": "read_and_write",
             "name": "weight_file1",
-            "default_value": "",
+            "default_value": "head_pose_fsanet/fsanet_capsule_3_16_2_21_5.h5",
             "type": "str",
             "required": true,
             "valid": {},
@@ -71,7 +71,7 @@
         {
             "rule": "read_and_write",
             "name": "weight_file2",
-            "default_value": "",
+            "default_value": "head_pose_fsanet/fsanet_var_capsule_3_16_2_21_5.h5",
             "type": "str",
             "required": true,
             "valid": {},
@@ -87,7 +87,7 @@
         {
             "rule": "read_and_write",
             "name": "weight_file3",
-            "default_value": "",
+            "default_value": "head_pose_fsanet/fsanet_noS_capsule_3_16_2_192_5.h5",
             "type": "str",
             "required": true,
             "valid": {},
@@ -103,7 +103,7 @@
         {
             "rule": "read_and_write",
             "name": "face_proto_file",
-            "default_value": "",
+            "default_value": "head_pose_fsanet/deploy.prototxt",
             "type": "str",
             "required": true,
             "valid": {},
@@ -119,7 +119,7 @@
         {
             "rule": "read_and_write",
             "name": "face_model_file",
-            "default_value": "",
+            "default_value": "head_pose_fsanet/res10_300x300_ssd_iter_140000.caffemodel",
             "type": "str",
             "required": true,
             "valid": {},
