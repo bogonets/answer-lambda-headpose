@@ -36,11 +36,11 @@
             "name": "detectron2"
         },
         "titles": {
-            "en": "Detectron2 Detection",
-            "ko": "Detectron2 탐지"
+            "en": "Head pose estimation",
+            "ko": "머리 포즈 측정"
         },
         "descriptions": {
-            "en": "Detection by Detectron2.",
+            "en": "",
             "ko": "."
         },
         "documentation_mime": "text",
